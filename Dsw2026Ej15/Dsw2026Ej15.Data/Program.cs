@@ -1,5 +1,5 @@
 
-namespace Dsw2026Ej15.Api
+namespace Dsw2026Ej15.Data
 {
     public class Program
     {
