@@ -18,11 +18,10 @@ namespace Dsw2026Ej15.Data
             return doctors;
         }
 
-        private void LoadSpecialities()
+        private async void LoadSpecialities()
         {
-            string fileName = "especialidades.json";
-            var json = await File.ReadAllTextAsync("products.json");
-            var products = JsonSerializer.Deserialize<List<Product>>(json);
+            var json = await File.ReadAllTextAsync("specialities.json");
+            var products = JsonSerializer.Deserialize<List<Speciality>>(json);
         }
     }
 }
