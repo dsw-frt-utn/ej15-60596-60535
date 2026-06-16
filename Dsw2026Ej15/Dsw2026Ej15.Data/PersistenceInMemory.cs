@@ -2,7 +2,7 @@
 using System.Text.Json;
 namespace Dsw2026Ej15.Data
 {
-    public class PersistenceInMemory
+    public class PersistenceInMemory : IPersistence
     {
         private List <Doctor> doctors;
         private List<Speciality> specialities;
@@ -20,7 +20,7 @@ namespace Dsw2026Ej15.Data
 
         public void AgregarEspecialidad(string name, string descripcion)
         {
-            Speciality speciality = new Speciality(name, descripcion);
+            Speciality speciality = new Speciality (name, descripcion);
             specialities.Add(speciality);
         }
 
@@ -28,10 +28,12 @@ namespace Dsw2026Ej15.Data
         {
             return specialities;
         }
+
         private async void LoadSpecialities()
         {
-            var json = await File.ReadAllTextAsync("specialties.json");
-            var products = JsonSerializer.Deserialize<List<Speciality>>(json);
+            var json = await File.ReadAllTextAsync("specialities.json");
+            var specialities = JsonSerializer.Deserialize<List<Speciality>>(json);
         }
+       
     }
 }
