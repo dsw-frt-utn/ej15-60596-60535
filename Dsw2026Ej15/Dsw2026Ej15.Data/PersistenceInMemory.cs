@@ -20,7 +20,7 @@ namespace Dsw2026Ej15.Data
 
         public void AgregarEspecialidad(string name, string descripcion)
         {
-            Speciality speciality = new Speciality(name, descripcion);
+            Speciality speciality = new Speciality (name, descripcion);
             specialities.Add(speciality);
         }
 
