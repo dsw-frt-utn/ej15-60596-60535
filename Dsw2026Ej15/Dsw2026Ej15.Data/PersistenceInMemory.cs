@@ -1,7 +1,10 @@
-﻿namespace Dsw2026Ej15.Data
+﻿using Dsw2026Ej15.Domain;
+namespace Dsw2026Ej15.Data
 {
-    public class Class1
+    public class PersistenceInMemory
     {
+        private List <Doctor> doctors;
+        private List<Speciality> specialities;
 
     }
 }
