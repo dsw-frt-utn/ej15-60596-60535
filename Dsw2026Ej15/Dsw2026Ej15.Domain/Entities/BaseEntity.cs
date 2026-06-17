@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dsw2026Ej15.Domain
+namespace Dsw2026Ej15.Domain.Entities
 {
     public class BaseEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
     }
 }
