@@ -35,7 +35,7 @@ namespace Dsw2026Ej15.Api.Controllers
                 return BadRequest("La especialidad no existe");
             }
 
-            _persistence.AgregarDoctor(request.Name, request.LicenseNumber, speciality);
+            _persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
             return Created(); //Devuelve el código de estado 201
             
         }
@@ -49,5 +49,20 @@ namespace Dsw2026Ej15.Api.Controllers
             return Ok(doctors);
         }
 
+        [HttpDelete("{id}")]
+
+
+        public IActionResult DeleteDoctor(Guid id)
+        {
+            var doctor = _persistence.GetDoctorById(id);
+            if(doctor == null || doctor.IsActive == false)
+            {
+                return NotFound();
+            }
+            
+            doctor.IsActive = false;
+            return NoContent();
+
+        }
     }
 }

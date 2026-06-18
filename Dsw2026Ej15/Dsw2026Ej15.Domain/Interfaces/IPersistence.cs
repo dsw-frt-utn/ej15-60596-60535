@@ -13,9 +13,11 @@ namespace Dsw2026Ej15.Domain.Interfaces
 
         public List<Doctor> GetDoctors();
 
-        public void AgregarDoctor(string name, string licenseNum, Speciality speciality);
+        public void AddDoctor(string name, string licenseNum, Speciality speciality);
 
         public Speciality? GetSpecialityById(Guid? id);
+
+        public Doctor? GetDoctorById(Guid? id);
 
 
     }

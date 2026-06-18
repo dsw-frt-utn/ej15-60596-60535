@@ -9,7 +9,7 @@ namespace Dsw2026Ej15.Data
         private List <Doctor> _doctors = [];
         private List<Speciality> _specialities = [];
 
-        public void AgregarDoctor(string name, string licenseNum, Speciality speciality)
+        public void AddDoctor(string name, string licenseNum, Speciality speciality)
         {
             Doctor doctor = new Doctor(name, licenseNum, speciality);
             _doctors.Add(doctor);
@@ -34,6 +34,11 @@ namespace Dsw2026Ej15.Data
         public Speciality? GetSpecialityById(Guid? id)
         {
             return _specialities.SingleOrDefault(e => e.Id == id);
+        }
+
+        public Doctor? GetDoctorById (Guid? id)
+        {
+            return _doctors.SingleOrDefault(d => d.Id == id);
         }
         public PersistenceInMemory()
         {
