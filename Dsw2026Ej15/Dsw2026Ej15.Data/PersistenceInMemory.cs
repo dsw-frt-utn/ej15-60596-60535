@@ -15,7 +15,7 @@ namespace Dsw2026Ej15.Data
             _doctors.Add(doctor);
         }
 
-        public List<Doctor> ListarDoctores()
+        public List<Doctor> GetDoctors()
         {
             return _doctors;
         }
@@ -43,15 +43,15 @@ namespace Dsw2026Ej15.Data
         {
             try
             {
-                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "specialties.json");
+                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "specialities.json");
                 var json = File.ReadAllText(jsonPath);
                 var specialities = JsonSerializer.Deserialize<List<SpecialityDto>>(json, new JsonSerializerOptions()
                 { PropertyNameCaseInsensitive = true}) ?? [];
                 _specialities = [.. specialities.Select(s => new Speciality(s.Name, s.Description, s.Id))];
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
            
         }

@@ -1,5 +1,6 @@
 
 using Dsw2026Ej15.Api.Models;
+using Dsw2026Ej15.Domain.Entities;
 using Dsw2026Ej15.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +35,19 @@ namespace Dsw2026Ej15.Api.Controllers
                 return BadRequest("La especialidad no existe");
             }
 
+            _persistence.AgregarDoctor(request.Name, request.LicenseNumber, speciality);
             return Created(); //Devuelve el código de estado 201
+            
         }
+
+        [HttpGet]
+
+        public IActionResult GetActiveDoctors()
+        {
+            var doctors = _persistence.GetDoctors();
+
+            return Ok(doctors);
+        }
+
     }
 }
