@@ -1,6 +1,7 @@
 using Dsw2026Ej15.Api.Models;
 using Dsw2026Ej15.Domain.Entities;
 using Dsw2026Ej15.Domain.Interfaces;
+using Dsw2026Ej15.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
 
@@ -26,14 +27,15 @@ namespace Dsw2026Ej15.Api.Controllers
             if(string.IsNullOrWhiteSpace(request.Name) || 
                 string.IsNullOrWhiteSpace(request.LicenseNumber))
             {
-                return BadRequest("Nombre y Matrícula son requeridos");
+                throw new ValidationException("Nombre y matricula requeridos");
             }
 
             var speciality = _persistence.GetSpecialityById(request.SpecialityId);
             if(speciality == null)
             {
-                return BadRequest("La especialidad no existe");
+                throw new ValidationException("La especialidad no existe");
             }
+        
 
 
             //_persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
