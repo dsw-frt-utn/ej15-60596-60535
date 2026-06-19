@@ -1,7 +1,8 @@
-
 using Dsw2026Ej15.Api.Models;
+using Dsw2026Ej15.Domain.Entities;
 using Dsw2026Ej15.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 
 namespace Dsw2026Ej15.Api.Controllers
 {
@@ -34,7 +35,22 @@ namespace Dsw2026Ej15.Api.Controllers
                 return BadRequest("La especialidad no existe");
             }
 
-            return Created(); //Devuelve el código de estado 201
+            //_persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
+            var doctor = _persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
+
+            return Created("", $"Se creó el médico: {doctor.Name}, Id:{doctor.Id}"); 
+        }
+
+        [HttpGet("{doctorId}")]
+        public async Task <IActionResult> GetDoctorActive(Guid doctorId)
+        {
+            var doctor = _persistence.GetDoctorById(doctorId);
+            if (doctor == null || doctor.IsActive == false)
+            {
+                return NotFound("El médico no existe o no está activo.");
+            }
+
+            return Ok($"DATOS DEL MÉDICO: - Name: {doctor.Name} | - License Number: {doctor.LicenseNumber} | - Speciality Name: {doctor.Speciality.Name}");
         }
     }
 }

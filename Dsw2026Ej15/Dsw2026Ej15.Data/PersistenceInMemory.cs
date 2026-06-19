@@ -9,10 +9,11 @@ namespace Dsw2026Ej15.Data
         private List <Doctor> _doctors = [];
         private List<Speciality> _specialities = [];
 
-        public void AgregarDoctor(string name, string licenseNum, Speciality speciality)
+        public Doctor AddDoctor(string name, string license, Speciality speciality)
         {
-            Doctor doctor = new Doctor(name, licenseNum, speciality);
+            Doctor doctor = new Doctor(name, license, speciality);
             _doctors.Add(doctor);
+            return doctor;
         }
 
         public List<Doctor> ListarDoctores()
@@ -35,6 +36,12 @@ namespace Dsw2026Ej15.Data
         {
             return _specialities.SingleOrDefault(e => e.Id == id);
         }
+
+        public Doctor? GetDoctorById(Guid? id)
+        {
+            return _doctors.SingleOrDefault(e => e.Id == id);
+        }
+
         public PersistenceInMemory()
         {
             LoadSpecialities();
@@ -43,18 +50,30 @@ namespace Dsw2026Ej15.Data
         {
             try
             {
-                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "specialties.json");
+                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "specialities.json");
+
+                if (!File.Exists(jsonPath))
+                {
+                    Console.WriteLine($"[ERROR] No se encontró el archivo JSON en la ruta: {jsonPath}");
+                    return;
+                }
+
                 var json = File.ReadAllText(jsonPath);
                 var specialities = JsonSerializer.Deserialize<List<SpecialityDto>>(json, new JsonSerializerOptions()
                 { PropertyNameCaseInsensitive = true}) ?? [];
                 _specialities = [.. specialities.Select(s => new Speciality(s.Name, s.Description, s.Id))];
+                Console.WriteLine($"[OK] Se cargaron {_specialities.Count} especialidades correctamente.");
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"[ERROR DE JSON] El archivo tiene un problema de formato: {jsonEx.Message}");
             }
             catch(Exception)
             {
-
+                Console.WriteLine($"¡Alerta! Falló la carga del JSON: ");
             }
            
         }
-       
+
     }
 }
