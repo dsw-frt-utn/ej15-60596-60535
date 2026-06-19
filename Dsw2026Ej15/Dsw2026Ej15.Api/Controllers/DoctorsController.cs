@@ -36,8 +36,6 @@ namespace Dsw2026Ej15.Api.Controllers
                 throw new ValidationException("La especialidad no existe");
             }
         
-
-
             //_persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
             var doctor = _persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
 

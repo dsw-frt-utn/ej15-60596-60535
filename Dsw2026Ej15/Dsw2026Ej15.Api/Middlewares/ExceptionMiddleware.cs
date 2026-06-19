@@ -23,7 +23,7 @@ namespace Dsw2026Ej15.Api.Middlewares
                 // si lanza ValidationException → 400 Bad Request
                 context.Response.StatusCode = 400;
                 context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(ex.Message);
+                await context.Response.WriteAsync($"{{ \"error\": \"{ex.Message}\"}}");
             }
             catch (Exception ex)
             {
