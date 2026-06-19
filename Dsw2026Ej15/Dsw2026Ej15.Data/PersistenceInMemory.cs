@@ -16,7 +16,7 @@ namespace Dsw2026Ej15.Data
             return doctor;
         }
 
-        public List<Doctor> ListarDoctores()
+        public List<Doctor> GetDoctors()
         {
             return _doctors;
         }
@@ -51,13 +51,6 @@ namespace Dsw2026Ej15.Data
             try
             {
                 string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "specialities.json");
-
-                if (!File.Exists(jsonPath))
-                {
-                    Console.WriteLine($"[ERROR] No se encontró el archivo JSON en la ruta: {jsonPath}");
-                    return;
-                }
-
                 var json = File.ReadAllText(jsonPath);
                 var specialities = JsonSerializer.Deserialize<List<SpecialityDto>>(json, new JsonSerializerOptions()
                 { PropertyNameCaseInsensitive = true}) ?? [];
@@ -68,9 +61,9 @@ namespace Dsw2026Ej15.Data
             {
                 Console.WriteLine($"[ERROR DE JSON] El archivo tiene un problema de formato: {jsonEx.Message}");
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                Console.WriteLine($"¡Alerta! Falló la carga del JSON: ");
+                Console.WriteLine(ex.Message);
             }
            
         }

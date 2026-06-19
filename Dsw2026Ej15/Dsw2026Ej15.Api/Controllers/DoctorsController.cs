@@ -35,10 +35,36 @@ namespace Dsw2026Ej15.Api.Controllers
                 return BadRequest("La especialidad no existe");
             }
 
+
             //_persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
             var doctor = _persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
 
-            return Created("", $"Se creó el médico: {doctor.Name}, Id:{doctor.Id}"); 
+            return Created("", $"Se creó el médico: {doctor.Name}, Id:{doctor.Id}");
+
+        }
+
+        [HttpGet]
+
+        public IActionResult GetActiveDoctors()
+        {
+            var doctors = _persistence.GetDoctors();
+
+            return Ok(doctors);
+        }
+
+        [HttpDelete("{id}")]
+
+
+        public IActionResult DeleteDoctor(Guid id)
+        {
+            var doctor = _persistence.GetDoctorById(id);
+            if(doctor == null || doctor.IsActive == false)
+            {
+                return NotFound();
+            }
+            
+            doctor.IsActive = false;
+            return NoContent();
         }
 
         [HttpGet("{doctorId}")]
