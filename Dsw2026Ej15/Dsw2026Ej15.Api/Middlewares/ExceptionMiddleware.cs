@@ -1,6 +1,6 @@
 ﻿using Dsw2026Ej15.Domain.Exceptions;
 
-namespace Dsw2026Ej15.Api.Middlewares
+namespace Dsw2026Ej15.Api.Middleware
 {
     public class ExceptionMiddleware
     {

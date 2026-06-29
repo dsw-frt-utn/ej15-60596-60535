@@ -55,11 +55,6 @@ namespace Dsw2026Ej15.Data
                 var specialities = JsonSerializer.Deserialize<List<SpecialityDto>>(json, new JsonSerializerOptions()
                 { PropertyNameCaseInsensitive = true}) ?? [];
                 _specialities = [.. specialities.Select(s => new Speciality(s.Name, s.Description, s.Id))];
-                Console.WriteLine($"[OK] Se cargaron {_specialities.Count} especialidades correctamente.");
-            }
-            catch (JsonException jsonEx)
-            {
-                Console.WriteLine($"[ERROR DE JSON] El archivo tiene un problema de formato: {jsonEx.Message}");
             }
             catch(Exception ex)
             {
