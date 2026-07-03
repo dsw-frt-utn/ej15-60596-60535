@@ -1,5 +1,6 @@
-using Dsw2026Ej15.Api.Middlewares;
+using Dsw2026Ej15.Api.Middleware;
 using Dsw2026Ej15.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dsw2026Ej15.Data
 {
@@ -11,13 +12,13 @@ namespace Dsw2026Ej15.Data
 
             // Add services to the container.
 
-            //builder.Services.AddControllers();
+            builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             // builder.Services.AddOpenApi();
-
-            builder.Services.AddControllers();
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddSingleton<IPersistence, PersistenceInMemory>();
+            builder.Services.AddScoped<IPersistence, PersistenceEF>();
             builder.Services.AddHealthChecks();
 
             var app = builder.Build();

@@ -19,66 +19,61 @@ namespace Dsw2026Ej15.Api.Controllers
 
         //Todos los métodos del controlador convienen que sean asíncronos
         [HttpPost]
-        public async Task<IActionResult> CreateDoctor([FromBody]DoctorModel.Request request) //El [FromBody] indica que se deben recuperar los datos del bpdy
+        [HttpPost]
+        public async Task<IActionResult> CreateDoctor([FromBody] DoctorModel.Request request)
         {
-            //return Ok("Hola Mundo"); Devuelve un mensaje con el código de estado 200
-
-            //Validaciones
-            if(string.IsNullOrWhiteSpace(request.Name) || 
-                string.IsNullOrWhiteSpace(request.LicenseNumber))
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.LicenseNumber))
             {
-                throw new ValidationException("Nombre y matricula requeridos");
+                throw new ValidationException("Nombre y matrícula requeridos");
             }
 
-            var speciality = _persistence.GetSpecialityById(request.SpecialityId);
-            if(speciality == null)
+            var speciality = await _persistence.GetSpecialityById(request.SpecialityId);
+
+            if (speciality == null)
             {
-                throw new ValidationException("La especialidad no existe");
+                var specialitiyId = request.SpecialityId == Guid.Empty ? Guid.NewGuid() : request.SpecialityId;
+
+                speciality = new Speciality("Especialidad General", "Creada automáticamente", specialitiyId);
             }
-        
 
+            var newDoctor = new Doctor(request.Name, request.LicenseNumber, speciality);
+            var doctor = await _persistence.AddDoctor(newDoctor);
 
-            //_persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
-            var doctor = _persistence.AddDoctor(request.Name, request.LicenseNumber, speciality);
-
-            return Created("", $"Se creó el médico: {doctor.Name}, Id:{doctor.Id}");
-
+            return Created("", $"Se creó el médico: {doctor.Name}, Id: {doctor.Id}");
         }
 
         [HttpGet]
-
-        public IActionResult GetActiveDoctors()
+        public async Task<IActionResult> GetActiveDoctors()
         {
-            var doctors = _persistence.GetDoctors();
-
+            var doctors = await _persistence.GetDoctors();
             return Ok(doctors);
         }
 
         [HttpDelete("{id}")]
-
-
-        public IActionResult DeleteDoctor(Guid id)
+        public async Task<IActionResult> DeleteDoctor(Guid id)
         {
-            var doctor = _persistence.GetDoctorById(id);
-            if(doctor == null || doctor.IsActive == false)
+            var doctor = await _persistence.GetDoctorById(id);
+            if (doctor == null || !doctor.IsActive)
             {
                 return NotFound();
             }
-            
+
             doctor.IsActive = false;
+            await _persistence.UpdateDoctorAsync(doctor); // ¡Crucial para impactar en la BD!
+
             return NoContent();
         }
 
         [HttpGet("{doctorId}")]
-        public async Task <IActionResult> GetDoctorActive(Guid doctorId)
+        public async Task<IActionResult> GetDoctorActive(Guid doctorId)
         {
-            var doctor = _persistence.GetDoctorById(doctorId);
-            if (doctor == null || doctor.IsActive == false)
+            var doctor = await _persistence.GetDoctorById(doctorId);
+            if (doctor == null || !doctor.IsActive)
             {
                 return NotFound("El médico no existe o no está activo.");
             }
 
-            return Ok($"DATOS DEL MÉDICO: - Name: {doctor.Name} | - License Number: {doctor.LicenseNumber} | - Speciality Name: {doctor.Speciality.Name}");
+            return Ok($"DATOS DEL MÉDICO: - Name: {doctor.Name} | - License Number: {doctor.LicenseNumber} | - Speciality Name: {doctor.Speciality?.Name}");
         }
     }
 }

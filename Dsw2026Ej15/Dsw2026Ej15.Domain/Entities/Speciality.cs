@@ -12,6 +12,7 @@ namespace Dsw2026Ej15.Domain.Entities
             Description = description;
             Id = id;
         }
+        private Speciality() { }
         public string Name { get; init; }
         public string Description { get; init; }
     }
