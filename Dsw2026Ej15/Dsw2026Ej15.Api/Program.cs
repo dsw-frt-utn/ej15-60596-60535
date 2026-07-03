@@ -1,5 +1,6 @@
 using Dsw2026Ej15.Api.Middlewares;
 using Dsw2026Ej15.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Dsw2026Ej15.Data
 {
@@ -17,8 +18,11 @@ namespace Dsw2026Ej15.Data
 
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddSingleton<IPersistence, PersistenceInMemory>();
+            builder.Services.AddScoped<IPersistence, PersistenceEf>();
             builder.Services.AddHealthChecks();
+            builder.Services.AddDbContext<AppDbContext>(options =>
+               options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=DSW2026_EJ16_Db;Trusted_Connection=True;")
+            );
 
             var app = builder.Build();
 
