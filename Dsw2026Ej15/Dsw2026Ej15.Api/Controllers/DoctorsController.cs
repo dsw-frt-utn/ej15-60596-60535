@@ -19,7 +19,6 @@ namespace Dsw2026Ej15.Api.Controllers
 
         //Todos los métodos del controlador convienen que sean asíncronos
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> CreateDoctor([FromBody] DoctorModel.Request request)
         {
             if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.LicenseNumber))
@@ -74,6 +73,13 @@ namespace Dsw2026Ej15.Api.Controllers
             }
 
             return Ok($"DATOS DEL MÉDICO: - Name: {doctor.Name} | - License Number: {doctor.LicenseNumber} | - Speciality Name: {doctor.Speciality?.Name}");
+        }
+
+        [HttpGet("specialities")]
+        public async Task<IActionResult> GetSpecialities()
+        {
+            var specialities = await _persistence.ListarEspecialidades();
+            return Ok(specialities);
         }
     }
 }
